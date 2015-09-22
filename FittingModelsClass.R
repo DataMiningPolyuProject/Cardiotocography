@@ -46,3 +46,8 @@ prediction_rf <- predict(rf, newdata = remainder)
 confusionMatrix(remainder$CLASS, prediction_rf)
 
 save(rf, file = "rfClass.rda")
+
+#Plot variable importance
+png(filename = "varImpClass.png", width = 500, height = 500)
+varImpPlot(rf$finalModel)
+dev.off()
