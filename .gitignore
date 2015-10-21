@@ -16,6 +16,8 @@ $RECYCLE.BIN/
 
 # R DATA
 *.rda
+.Rhistory
+*.png
 
 # Windows shortcuts
 *.lnk
@@ -44,3 +46,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+.Rproj.user
