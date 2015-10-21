@@ -14,7 +14,6 @@ library(rms)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
-setwd("C:/Users/User/Documents/GitHub/Cardiotocography")
 
 load(file = "data.rda")
 

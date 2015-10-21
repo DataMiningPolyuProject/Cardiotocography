@@ -2,14 +2,11 @@
 rm(list = ls())
 
 # Necessary libraries
+library(caret)
 library(XLConnect)  
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
-setwd("C:/Users/User/Documents/GitHub/Cardiotocography")
-
-
-
 
 wk = loadWorkbook("CTG.xls") 
 data = readWorksheet(wk, sheet="Raw Data")
