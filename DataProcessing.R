@@ -39,6 +39,7 @@ data$CLASS = as.factor(data$CLASS)
 # Finally, remove columns with near-zero variance
 data = data[,-nearZeroVar(data, freqCut = 300/1)]
 
+data <- data[-24:-33]
 
 # saving
 save(data, file = "data.rda")

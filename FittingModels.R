@@ -34,7 +34,7 @@ remainder        <- data[-inTrain,]
 fitControl <- trainControl(method = "oob")
 
 rf <- train(NSP~.,
-             data = training[-34], 
+             data = training[-24], 
              method = "rf",
              ntree = 1000,
              trControl = fitControl,
