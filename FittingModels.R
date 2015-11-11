@@ -42,7 +42,7 @@ rf <- train(NSP~.,
 )
 
 prediction_rf <- predict(rf, newdata = remainder)
-confusionMatrix(remainder$NSP, prediction_rf)
+print(confusionMatrix(remainder$NSP, prediction_rf))
 
 save(rf, file = "dat/rf.rda")
 

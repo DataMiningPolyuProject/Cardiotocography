@@ -41,7 +41,8 @@ data$CLASS = as.factor(data$CLASS)
 # Finally, remove columns with near-zero variance
 data = data[,-nearZeroVar(data, freqCut = 300/1)]
 
+# Remove binary decision classes
 data <- data[-24:-33]
 
 # saving
-save(data, file = "dat/data.rda")
+save(data, file = "dat/raw_data.rda")

@@ -21,9 +21,11 @@ class_testing <- data[-sub, -25]
 model <- naiveBayes(NSP~., nsp_training)
 prediction <- predict(model, nsp_testing)
 nsp_verification <- confusionMatrix(nsp_testing$NSP, prediction)
+print(nsp_verification)
 save(nsp_verification, file = "dat/nsp_naiveBayes.rda")
 
 model <- naiveBayes(CLASS~., class_training)
 prediction <- predict(model, class_testing)
 class_verification <- confusionMatrix(class_testing$CLASS, prediction)
+print(class_verification)
 save(class_verification, file = "dat/class_naiveBayes.rda")
