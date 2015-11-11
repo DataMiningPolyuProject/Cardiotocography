@@ -11,11 +11,11 @@ load(file = "data.rda")
 # partition dataset: 80% training, 20% testing
 sub <- sample(nrow(data), nrow(data)*0.8)
 
-nsp_training <- data[sub, -34]
-nsp_testing <- data[-sub, -34]
+nsp_training <- data[sub, -24]
+nsp_testing <- data[-sub, -24]
 
-class_training <- data[sub, -35]
-class_testing <- data[-sub, -35]
+class_training <- data[sub, -25]
+class_testing <- data[-sub, -25]
 
 # building Naive Bayesian model
 model <- naiveBayes(NSP~., nsp_training)
