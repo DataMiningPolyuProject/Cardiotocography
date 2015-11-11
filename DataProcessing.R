@@ -42,4 +42,4 @@ data = data[,-nearZeroVar(data, freqCut = 300/1)]
 data <- data[-24:-33]
 
 # saving
-save(data, file = "data.rda")
+save(data, file = "dat/data.rda")

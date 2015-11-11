@@ -15,7 +15,7 @@ library(rms)
 # Set seed for reproducibility and also set working directory
 set.seed(1)
 
-load(file = "data.rda")
+load(file = "dat/data.rda")
 
 
 # Further partitioning our original training data into training and test sets
@@ -44,9 +44,9 @@ rf <- train(CLASS~.,
 prediction_rf <- predict(rf, newdata = remainder)
 confusionMatrix(remainder$CLASS, prediction_rf)
 
-save(rf, file = "rfClass.rda")
+save(rf, file = "dat/rfClass.rda")
 
 #Plot variable importance
-png(filename = "varImpClass.png", width = 500, height = 500)
+png(filename = "plot/varImpClass.png", width = 500, height = 500)
 varImpPlot(rf$finalModel)
 dev.off()

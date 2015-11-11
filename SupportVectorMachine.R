@@ -6,7 +6,7 @@ library(e1071)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
-load(file = "data.rda")
+load(file = "dat/data.rda")
 
 # partition dataset: 80% training, 20% testing
 sub <- sample(nrow(data), nrow(data)*0.8)
@@ -21,10 +21,10 @@ class_testing <- data[-sub, -25]
 svm_model <- svm(NSP~., nsp_training)
 svm_predict <- predict(svm_model, nsp_testing)
 nsp_verification <- confusionMatrix(nsp_testing$NSP, svm_predict)
-save(nsp_verification, file = "nsp_svm.rda")
+save(nsp_verification, file = "dat/nsp_svm.rda")
 
 # predict CLASS
 svm_model <- svm(CLASS~., class_training)
 svm_predict <- predict(svm_model, class_testing)
 class_verification <- confusionMatrix(class_testing$CLASS, svm_predict)
-save(class_verification, file = "class_svm.rda")
+save(class_verification, file = "dat/class_svm.rda")

@@ -6,7 +6,7 @@ library(e1071)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
-load(file = "data.rda")
+load(file = "dat/data.rda")
 
 # partition dataset: 80% training, 20% testing
 sub <- sample(nrow(data), nrow(data)*0.8)
@@ -21,9 +21,9 @@ class_testing <- data[-sub, -25]
 model <- naiveBayes(NSP~., nsp_training)
 prediction <- predict(model, nsp_testing)
 nsp_verification <- confusionMatrix(nsp_testing$NSP, prediction)
-save(nsp_verification, file = "nsp_naiveBayes.rda")
+save(nsp_verification, file = "dat/nsp_naiveBayes.rda")
 
 model <- naiveBayes(CLASS~., class_training)
 prediction <- predict(model, class_testing)
 class_verification <- confusionMatrix(class_testing$CLASS, prediction)
-save(class_verification, file = "class_naiveBayes.rda")
+save(class_verification, file = "dat/class_naiveBayes.rda")
