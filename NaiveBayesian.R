@@ -3,8 +3,8 @@ rm(list = ls())
 
 # load libraries
 library(caret)
-library(doMC)
-registerDoMC(cores = 8)
+library(doParallel)
+registerDoParallel(cores = 8)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)

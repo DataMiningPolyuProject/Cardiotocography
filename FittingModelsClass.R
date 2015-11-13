@@ -9,8 +9,8 @@ library(mice)
 library(ggplot2)
 library(RColorBrewer)
 library(rms)
-library(doMC)
-registerDoMC(cores = 8)
+library(doParallel)
+registerDoParallel(cores = 4)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)

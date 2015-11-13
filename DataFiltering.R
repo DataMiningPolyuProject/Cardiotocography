@@ -44,11 +44,6 @@ nsp_testing <- nsp_raw_testing[,-highCorAttrib]
 class_training <- class_raw_training[,-highCorAttrib]
 class_testing <- class_raw_testing[,-highCorAttrib]
 
-nsp_training <- nsp_raw_training
-nsp_testing <- nsp_raw_testing
-class_training <- class_raw_training
-class_testing <- class_raw_testing
-
 ### RFE filtering ###
 # feature importance
 nspFeatures <- rfe(nsp_training[,1:(length(nsp_training)-1)], 
@@ -71,7 +66,7 @@ m[length(m)+1] = "CLASS"
 nsp_training <- nsp_training[,l]
 nsp_testing <- nsp_testing[,l]
 class_training <- class_training[,m]
-class_training <- class_testing[,m]
+class_testing <- class_testing[,m]
 
 print(predictors(nspFeatures))
 png(filename = "plot/nsp_rfe.png", width = 1000, height = 1000)
