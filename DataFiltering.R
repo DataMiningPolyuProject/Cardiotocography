@@ -15,7 +15,7 @@ seeds <- vector(mode = "list", length = 6) # length is = (n_repeats*nresampling)
 for(i in 1:5) seeds[[i]]<- sample.int(n=1000, 22) # ...the number of tuning parameter...
 seeds[[6]]<-sample.int(1000, 1) # for the last model
 
-
+# load data segments
 load(file = "dat/raw_training.rda")
 load(file = "dat/raw_testing.rda")
 
@@ -67,12 +67,14 @@ nspFeatures <- rfe(nsp_training[,1:(length(nsp_training)-1)],
                    size=c(1:(length(nsp_training)-1)),
                    rfeControl=rfeControl(functions=rfFuncs, method="repeatedcv", number = 5, seeds = seeds)
 )
+save(nspFeatures, file = "model/nsp_features.rda")
 
 classFeatures <- rfe(class_training[,1:(length(class_training)-1)],
                      class_training$CLASS,
                      size=c(1:(length(class_training)-1)),
                      rfeControl=rfeControl(functions=rfFuncs, method="repeatedcv", number=5, seeds = seeds)
 )
+save(classFeatures, file = "model/class_features.rda")
 
 l <- predictors(nspFeatures)
 l[length(l)+1] = "NSP"
@@ -87,13 +89,13 @@ class_testing <- class_testing[,m]
 print("Selected NSP predictors:")
 print(predictors(nspFeatures))
 png(filename = "plot/nsp_rfe.png", width = 1000, height = 1000)
-plot(nspFeatures, type=c("g", "o"), main = "CLASS Feature Selection with Random Forest and 95% cor. filtering")
+plot(nspFeatures, type=c("g", "o"), main = "CLASS Feature Selection with Naive Bayesian and 95% cor. filtering")
 dev.off()
 
 print("Selected CLASS predictors:")
 print(predictors(classFeatures))
 png(filename = "plot/class_rfe.png", width = 1000, height = 1000)
-plot(classFeatures, type=c("g", "o"), main = "CLASS Feature Selection with Random Forest and 95% cor. filtering")
+plot(classFeatures, type=c("g", "o"), main = "CLASS Feature Selection with Naive Bayesian and 95% cor. filtering")
 dev.off()
 
 # save result
