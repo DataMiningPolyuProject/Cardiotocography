@@ -44,6 +44,14 @@ nsp_testing <- nsp_raw_testing[,-highCorAttrib]
 class_training <- class_raw_training[,-highCorAttrib]
 class_testing <- class_raw_testing[,-highCorAttrib]
 
+scaledData <- scale(nsp_raw_training[,1:22][,-highCorAttrib], center = TRUE, scale = TRUE)
+corMatrix <- cor(scaledData)
+
+# plot cor matrix heatmap with high corr predictors removed
+png(filename = "plot/attrCorrelationFiltered.png", width = 1000, height = 1000)
+corrplot(corMatrix, order="hclust")
+dev.off()
+
 ### RFE filtering ###
 # feature importance
 nspFeatures <- rfe(nsp_training[,1:(length(nsp_training)-1)], 
