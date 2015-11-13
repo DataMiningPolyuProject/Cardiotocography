@@ -9,14 +9,15 @@ library(mice)
 library(ggplot2)
 library(RColorBrewer)
 library(rms)
-
-
+library(doMC)
+registerDoMC(cores = 4)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
 
 load(file = "dat/data.rda")
-
+nspCol = length(data)
+classCol = length(data) - 1
 
 # Further partitioning our original training data into training and test sets
 inTrain         = createDataPartition(data$CLASS, p = 0.8)[[1]]
@@ -34,7 +35,7 @@ remainder        <- data[-inTrain,]
 fitControl <- trainControl(method = "oob")
 
 rf <- train(CLASS~.,
-            data = training[-25], 
+            data = training[-nspCol], 
             method = "rf",
             ntree = 1000,
             trControl = fitControl,
@@ -42,7 +43,7 @@ rf <- train(CLASS~.,
 )
 
 prediction_rf <- predict(rf, newdata = remainder)
-confusionMatrix(remainder$CLASS, prediction_rf)
+print(confusionMatrix(remainder$CLASS, prediction_rf))
 
 save(rf, file = "dat/rfClass.rda")
 

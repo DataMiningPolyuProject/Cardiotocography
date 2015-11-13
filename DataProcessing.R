@@ -44,5 +44,13 @@ data = data[,-nearZeroVar(data, freqCut = 300/1)]
 # Remove binary decision classes
 data <- data[-24:-33]
 
+# shuffle and split for training and testing
+data <- data[sample(nrow(data)),]
+# NSP classification
+inTrain <- createDataPartition(data$NSP, p=0.8)[[1]]
+training <- data[inTrain, ]
+testing <- data[-inTrain, ]
+
 # saving
-save(data, file = "dat/raw_data.rda")
+save(training, file = "dat/raw_training.rda")
+save(testing, file = "dat/raw_testing.rda")

@@ -8,36 +8,49 @@ library(caret)
 # Set seed for reproducibility and also set working directory
 set.seed(1)
 load(file = "dat/data.rda")
+nspCol = length(data)
+classCol = length(data) - 1
+print(sprintf("NSP: %g, class: %g", nspCol, classCol))
 
-# specify col containing classification result
-nsp_col = 18
-class_col = 17
+# NSP classification
+inTrain <- createDataPartition(data$NSP, p=0.8)[[1]]
+training <- data[inTrain, ]
+testing <- data[-inTrain, ]
 
-# partition dataset: 80% training, 20% testing
-data <- data[sample(nrow(data)),]
-folds <- cut(seq(1,nrow(data)),breaks=5,labels=FALSE)
+fitControl <- trainControl(method = "repeatedCV", 
+                           number = 5, 
+                           repeats = 1,
+                           index = createMultiFolds(training$NSP, k=5, times=1)
+)
 
-# building Naive Bayesian model
-nb_nsp_verification <- vector("list", 5)
-for(i in 1:5) {
-  testIndexes <- which(folds==i, arr.ind=TRUE)
-  nsp_testing <- data[testIndexes, -24]
-  nsp_training <- data[-testIndexes, -24]
-  model <- naiveBayes(NSP~., nsp_training)
-  prediction <- predict(model, nsp_testing)
-  nb_nsp_verification[[i]] <- confusionMatrix(nsp_testing$NSP, prediction)
-}
+#Define Equation for Models
+nsp_nb_model <- train(NSP~.,
+                       data = training[,-classCol],
+                       method = "nb",
+                       preProc = c("center","scale"),
+                       trControl = fitControl
+)
 
-save(nb_nsp_verification, file = "dat/nsp_naiveBayes.rda")
+nsp_nb_predict <- predict(nsp_nb_model, testing[,-classCol])
+nsp_nb_verification <- confusionMatrix(testing$NSP, nsp_nb_predict)
+print(nsp_nb_verification)
+save(nsp_nb_verification, file = "dat/nsp_nb.rda")
 
-nb_class_verification <- vector("list", 5)
-for(i in 1:5) {
-  testIndexes <- which(folds==i, arr.ind=TRUE)
-  class_testing <- data[testIndexes, -25]
-  class_training <- data[-testIndexes, -25]
-  model <- naiveBayes(CLASS~., class_training)
-  prediction <- predict(model, class_testing)
-  nb_class_verification[[i]] <- confusionMatrix(class_testing$CLASS, prediction)
-}
+# class classification
+fitControl <- trainControl(method = "repeatedCV", 
+                           number = 5, 
+                           repeats = 1,
+                           index = createMultiFolds(training$CLASS, k=5, times=1)
+)
 
-save(nb_class_verification, file = "dat/class_naiveBayes.rda")
+#Define Equation for Models
+class_nb_model <- train(CLASS~.,
+                         data = training[, -nspCol],
+                         method = "nb",
+                         preProc = c("center","scale"),
+                         trControl = fitControl
+)
+
+class_nb_predict <- predict(class_nb_model, testing[, -nspCol])
+class_nb_verification <- confusionMatrix(testing$CLASS, class_nb_predict)
+print(class_nb_verification)
