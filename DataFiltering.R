@@ -4,8 +4,8 @@ rm(list = ls())
 # load libraries
 library(corrplot)
 library(caret)
-library(doMC)
-registerDoMC(cores = 8)
+#library(doParallel)
+#registerDoParallel(cores = 4)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
@@ -34,9 +34,8 @@ png(filename = "plot/attrCorrelation.png", width = 1000, height = 1000)
 corrplot(corMatrix, order="hclust")
 dev.off()
 
-# get highly correlated attributes (>95%)
+# get highly correlated attributes (>70%)
 highCorAttrib <- findCorrelation(corMatrix, cutoff=0.95)
-print("Removing predictor with correlation close to 100% ....")
 print(sort(highCorAttrib, decreasing = TRUE))
 
 # remove attributes with high correlation
@@ -45,18 +44,23 @@ nsp_testing <- nsp_raw_testing[,-highCorAttrib]
 class_training <- class_raw_training[,-highCorAttrib]
 class_testing <- class_raw_testing[,-highCorAttrib]
 
+nsp_training <- nsp_raw_training
+nsp_testing <- nsp_raw_testing
+class_training <- class_raw_training
+class_testing <- class_raw_testing
+
 ### RFE filtering ###
 # feature importance
 nspFeatures <- rfe(nsp_training[,1:(length(nsp_training)-1)], 
                    nsp_training$NSP, 
                    size=c(1:(length(nsp_training)-1)),
-                   rfeControl=rfeControl(functions=nbFuncs, method="cv", number = 5)
+                   rfeControl=rfeControl(functions=nbFuncs, method="repeatedcv", number = 5)
 )
 
 classFeatures <- rfe(class_training[,1:(length(class_training)-1)],
                      class_training$CLASS,
                      size=c(1:(length(class_training)-1)),
-                     rfeControl=rfeControl(functions=nbFuncs, method="cv", number=5)
+                     rfeControl=rfeControl(functions=nbFuncs, method="repeatedcv", number=5)
 )
 
 l <- predictors(nspFeatures)
@@ -69,13 +73,11 @@ nsp_testing <- nsp_testing[,l]
 class_training <- class_training[,m]
 class_training <- class_testing[,m]
 
-print("Selected predictors for NSP:")
 print(predictors(nspFeatures))
 png(filename = "plot/nsp_rfe.png", width = 1000, height = 1000)
 plot(nspFeatures, type=c("g", "o"))
 dev.off()
 
-print("Selected predictors for CLASS:")
 print(predictors(classFeatures))
 png(filename = "plot/class_rfe.png", width = 1000, height = 1000)
 plot(classFeatures, type=c("g", "o"))
