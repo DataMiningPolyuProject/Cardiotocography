@@ -12,7 +12,7 @@ set.seed(1)
 
 # seeds for parallel workers
 seeds <- vector(mode = "list", length = 6) # length is = (n_repeats*nresampling)+1
-for(i in 1:5) seeds[[i]]<- sample.int(n=1000, 21) # ...the number of tuning parameter...
+for(i in 1:5) seeds[[i]]<- sample.int(n=1000, 22) # ...the number of tuning parameter...
 seeds[[6]]<-sample.int(1000, 1) # for the last model
 
 
