@@ -4,7 +4,7 @@ rm(list = ls())
 # load libraries
 library(caret)
 library(doParallel)
-registerDoParallel(cores = 8)
+registerDoParallel(cores = 4)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
@@ -27,11 +27,12 @@ nsp_nb_model <- train(NSP~.,
                        preProc = c("center","scale"),
                        trControl = fitControl
 )
+save(nsp_nb_model, file = "model/nsp_nb_model.rda")
 
 nsp_nb_predict <- predict(nsp_nb_model, nsp_testing[,-(length(nsp_testing))])
 nsp_nb_verification <- confusionMatrix(nsp_testing$NSP, nsp_nb_predict)
 print(nsp_nb_verification)
-save(nsp_nb_verification, file = "dat/nsp_nb.rda")
+save(nsp_nb_verification, file = "dat/nsp_nb_verification.rda")
 
 # class classification
 fitControl <- trainControl(method = "repeatedCV", 
@@ -47,7 +48,9 @@ class_nb_model <- train(CLASS~.,
                          preProc = c("center","scale"),
                          trControl = fitControl
 )
+save(class_nb_model, file = "model/class_nb_model.rda")
 
 class_nb_predict <- predict(class_nb_model, class_testing[,-(length(class_testing))])
 class_nb_verification <- confusionMatrix(class_testing$CLASS, class_nb_predict)
 print(class_nb_verification)
+save(class_nb_verification, file = "dat/class_nb_verification.rda")

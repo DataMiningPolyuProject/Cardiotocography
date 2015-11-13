@@ -41,7 +41,7 @@ png(filename = "plot/attrCorrelation.png", width = 1000, height = 1000)
 corrplot(corMatrix, order="hclust")
 dev.off()
 
-# get highly correlated attributes (>70%)
+# get highly correlated attributes (>95%)
 highCorAttrib <- findCorrelation(corMatrix, cutoff=0.95)
 print("Remove predictors with >95% correlation:")
 print(sort(highCorAttrib, decreasing = TRUE))
@@ -87,13 +87,13 @@ class_testing <- class_testing[,m]
 print("Selected NSP predictors:")
 print(predictors(nspFeatures))
 png(filename = "plot/nsp_rfe.png", width = 1000, height = 1000)
-plot(nspFeatures, type=c("g", "o"))
+plot(nspFeatures, type=c("g", "o"), main = "CLASS Feature Selection with Random Forest and 95% cor. filtering")
 dev.off()
 
 print("Selected CLASS predictors:")
 print(predictors(classFeatures))
 png(filename = "plot/class_rfe.png", width = 1000, height = 1000)
-plot(classFeatures, type=c("g", "o"))
+plot(classFeatures, type=c("g", "o"), main = "CLASS Feature Selection with Random Forest and 95% cor. filtering")
 dev.off()
 
 # save result

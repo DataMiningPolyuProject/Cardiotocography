@@ -2,6 +2,7 @@
 rm(list = ls())
 dir.create("./dat", showWarnings = TRUE, recursive = FALSE, mode = "0777")
 dir.create("./plot", showWarnings = TRUE, recursive = FALSE, mode = "0777")
+dir.create("./model", showWarnings = TRUE, recursive = FALSE, mode = "0777")
 
 # Necessary libraries
 library(caret)
