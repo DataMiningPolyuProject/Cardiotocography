@@ -46,10 +46,11 @@ data <- data[-24:-33]
 
 # shuffle and split for training and testing
 data <- data[sample(nrow(data)),]
+
 # NSP classification
-inTrain <- createDataPartition(data$NSP, p=0.8)[[1]]
-training <- data[inTrain, ]
-testing <- data[-inTrain, ]
+trainIndex <- sample(1:nrow(data), trunc(length(1:nrow(data))/5))
+training <- data[trainIndex, ]
+testing <- data[-trainIndex, ]
 
 # saving
 save(training, file = "dat/raw_training.rda")

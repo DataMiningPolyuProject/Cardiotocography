@@ -5,39 +5,32 @@ rm(list = ls())
 library(e1071)
 library(caret)
 library(doMC)
-registerDoMC(cores = 4)
+registerDoMC(cores = 8)
 
 # Set seed for reproducibility and also set working directory
 set.seed(123)
-load(file = "dat/data.rda")
-
-# answer columns
-nspCol = length(data)
-classCol = length(data) - 1
-print(sprintf("NSP: %g, class: %g", nspCol, classCol))
-
-# NSP classification
-inTrain <- createDataPartition(data$NSP, p=0.8)[[1]]
-training <- data[inTrain, ]
-testing <- data[-inTrain, ]
+load(file = "dat/nsp_training.rda")
+load(file = "dat/nsp_testing.rda")
+load(file = "dat/class_training.rda")
+load(file = "dat/class_testing.rda")
 
 fitControl <- trainControl(method = "repeatedCV", 
                            number = 5, 
                            repeats = 1,
-                           index = createMultiFolds(training$NSP, k=5, times=1)
+                           index = createMultiFolds(nsp_training$NSP, k=5, times=1)
 )
 
 #Define Equation for Models
 nsp_svm_model <- train(NSP~.,
-                       data = training[,-classCol],
+                       data = nsp_training,
                        method = "svmLinear",
                        preProc = c("center","scale"),
                        trControl = fitControl,
                        tuneGrid = expand.grid(C= 2^c(0:5))
                        )
 
-nsp_svm_predict <- predict(nsp_svm_model, testing[,-classCol])
-nsp_svm_verification <- confusionMatrix(testing$NSP, nsp_svm_predict)
+nsp_svm_predict <- predict(nsp_svm_model, nsp_testing[,-(length(nsp_testing))])
+nsp_svm_verification <- confusionMatrix(nsp_testing$NSP, nsp_svm_predict)
 print(nsp_svm_verification)
 save(nsp_svm_verification, file = "dat/nsp_svm.rda")
 
@@ -45,18 +38,18 @@ save(nsp_svm_verification, file = "dat/nsp_svm.rda")
 fitControl <- trainControl(method = "repeatedCV", 
                            number = 5, 
                            repeats = 1,
-                           index = createMultiFolds(training$CLASS, k=5, times=1)
+                           index = createMultiFolds(class_training$CLASS, k=5, times=1)
 )
 
 #Define Equation for Models
 class_svm_model <- train(CLASS~.,
-                       data = training[, -nspCol],
+                       data = class_training,
                        method = "svmLinear",
                        preProc = c("center","scale"),
                        trControl = fitControl,
                        tuneGrid = expand.grid(C= 2^c(0:5))
 )
 
-class_svm_predict <- predict(class_svm_model, testing[, -nspCol])
-class_svm_verification <- confusionMatrix(testing$CLASS, class_svm_predict)
+class_svm_predict <- predict(class_svm_model, class_testing[,-(length(class_testing))])
+class_svm_verification <- confusionMatrix(class_testing$CLASS, class_svm_predict)
 print(class_svm_verification)

@@ -10,21 +10,14 @@ library(ggplot2)
 library(RColorBrewer)
 library(rms)
 library(doMC)
-registerDoMC(cores = 4)
+registerDoMC(cores = 8)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
-
-load(file = "dat/data.rda")
-nspCol = length(data)
-classCol = length(data) - 1
-
-# Further partitioning our original training data into training and test sets
-inTrain         = createDataPartition(data$CLASS, p = 0.8)[[1]]
-training        <- data[inTrain,]
-remainder        <- data[-inTrain,]
-
-
+load(file = "dat/nsp_training.rda")
+load(file = "dat/nsp_testing.rda")
+load(file = "dat/class_training.rda")
+load(file = "dat/class_testing.rda")
 
 #### MODELS
 
@@ -35,15 +28,15 @@ remainder        <- data[-inTrain,]
 fitControl <- trainControl(method = "oob")
 
 rf <- train(CLASS~.,
-            data = training[-nspCol], 
+            data = class_training, 
             method = "rf",
             ntree = 1000,
             trControl = fitControl,
             varImp = TRUE
 )
 
-prediction_rf <- predict(rf, newdata = remainder)
-print(confusionMatrix(remainder$CLASS, prediction_rf))
+prediction_rf <- predict(rf, newdata = class_testing[,-(length(class_testing))])
+print(confusionMatrix(class_testing$CLASS, prediction_rf))
 
 save(rf, file = "dat/rfClass.rda")
 
