@@ -4,11 +4,18 @@ rm(list = ls())
 # load libraries
 library(corrplot)
 library(caret)
-#library(doParallel)
-#registerDoParallel(cores = 4)
+library(doParallel)
+registerDoParallel(cores = 4)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
+
+# seeds for parallel workers
+seeds <- vector(mode = "list", length = 6) # length is = (n_repeats*nresampling)+1
+for(i in 1:5) seeds[[i]]<- sample.int(n=1000, 21) # ...the number of tuning parameter...
+seeds[[6]]<-sample.int(1000, 1) # for the last model
+
+
 load(file = "dat/raw_training.rda")
 load(file = "dat/raw_testing.rda")
 
@@ -36,6 +43,7 @@ dev.off()
 
 # get highly correlated attributes (>70%)
 highCorAttrib <- findCorrelation(corMatrix, cutoff=0.95)
+print("Remove predictors with >95% correlation:")
 print(sort(highCorAttrib, decreasing = TRUE))
 
 # remove attributes with high correlation
@@ -57,13 +65,13 @@ dev.off()
 nspFeatures <- rfe(nsp_training[,1:(length(nsp_training)-1)], 
                    nsp_training$NSP, 
                    size=c(1:(length(nsp_training)-1)),
-                   rfeControl=rfeControl(functions=nbFuncs, method="repeatedcv", number = 5)
+                   rfeControl=rfeControl(functions=rfFuncs, method="repeatedcv", number = 5, seeds = seeds)
 )
 
 classFeatures <- rfe(class_training[,1:(length(class_training)-1)],
                      class_training$CLASS,
                      size=c(1:(length(class_training)-1)),
-                     rfeControl=rfeControl(functions=nbFuncs, method="repeatedcv", number=5)
+                     rfeControl=rfeControl(functions=rfFuncs, method="repeatedcv", number=5, seeds = seeds)
 )
 
 l <- predictors(nspFeatures)
@@ -76,11 +84,13 @@ nsp_testing <- nsp_testing[,l]
 class_training <- class_training[,m]
 class_testing <- class_testing[,m]
 
+print("Selected NSP predictors:")
 print(predictors(nspFeatures))
 png(filename = "plot/nsp_rfe.png", width = 1000, height = 1000)
 plot(nspFeatures, type=c("g", "o"))
 dev.off()
 
+print("Selected CLASS predictors:")
 print(predictors(classFeatures))
 png(filename = "plot/class_rfe.png", width = 1000, height = 1000)
 plot(classFeatures, type=c("g", "o"))
