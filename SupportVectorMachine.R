@@ -28,7 +28,7 @@ nsp_svm_model <- train(NSP~.,
                        trControl = fitControl,
                        tuneGrid = expand.grid(C= 2^c(0:5))
 )
-save(nsp_svm_model, "model/nsp_svm_model.rda")
+save(nsp_svm_model, file = "model/nsp_svm_model.rda")
 
 nsp_svm_predict <- predict(nsp_svm_model, nsp_testing[,-(length(nsp_testing))])
 nsp_svm_verification <- confusionMatrix(nsp_testing$NSP, nsp_svm_predict)
