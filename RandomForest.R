@@ -32,16 +32,16 @@ nsp_rf_model <- train(NSP~.,
              trControl = fitControl,
              varImp = TRUE
 )
-save(nsp_rf_model, "model/nsp_rf_model.rda")
+save(nsp_rf_model, file = "model/nsp_rf_model.rda")
 
-prediction_rf <- predict(rf, nsp_testing[,-(length(nsp_testing))])
-nsp_rf_verification <- confusionMatrix(nsp_testing$NSP, predication_rf)
-save(nsp_rf_verification, "dat/nsp_rf_verification.rda")
+prediction_rf <- predict(nsp_rf_model, nsp_testing[,-(length(nsp_testing))])
+nsp_rf_verification <- confusionMatrix(nsp_testing$NSP, prediction_rf)
+save(nsp_rf_verification, file = "dat/nsp_rf_verification.rda")
 print(nsp_rf_verification)
 
 #Plot variable importance
 png(filename = "plot/varImpNSP.png", width = 500, height = 500)
-varImpPlot(rf$finalModel)
+varImpPlot(nsp_rf_model$finalModel)
 dev.off()
 
 #### CLASS classification ####
@@ -61,12 +61,12 @@ class_rf_model <- train(CLASS~.,
 )
 save(class_rf_model, file = "model/class_rf_model.rda")
 
-prediction_rf <- predict(rf, newdata = class_testing[,-(length(class_testing))])
-class_rf_verification <- confusionMatrix(class_testing$CLASS, predication_rf)
+prediction_rf <- predict(class_rf_model, newdata = class_testing[,-(length(class_testing))])
+class_rf_verification <- confusionMatrix(class_testing$CLASS, prediction_rf)
 save(class_rf_verification, file = "dat/class_rf_verification.rda")
 print(class_rf_verification)
 
 #Plot variable importance
 png(filename = "plot/varImpClass.png", width = 500, height = 500)
-varImpPlot(rf$finalModel)
+varImpPlot(class_rf_model$finalModel)
 dev.off()

@@ -50,8 +50,8 @@ data <- data[sample(nrow(data)),]
 
 # NSP classification
 trainIndex <- sample(1:nrow(data), trunc(length(1:nrow(data))/5))
-training <- data[trainIndex, ]
-testing <- data[-trainIndex, ]
+testing <- data[trainIndex, ]
+training <- data[-trainIndex, ]
 
 # saving
 save(training, file = "dat/raw_training.rda")

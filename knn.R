@@ -27,11 +27,12 @@ nsp_knn_model <- train(NSP~.,
                        trControl = fitControl,
                       tuneGrid = expand.grid(k=(2:10))
 )
+save(nsp_knn_model, file = "model/nsp_knn_model.rda")
 
 nsp_knn_predict <- predict(nsp_knn_model, nsp_testing[,-(length(nsp_testing))])
 nsp_knn_verification <- confusionMatrix(nsp_testing$NSP, nsp_knn_predict)
 print(nsp_knn_verification)
-save(nsp_knn_verification, file = "dat/nsp_knn.rda")
+save(nsp_knn_verification, file = "dat/nsp_knn_verification.rda")
 
 # class classification
 fitControl <- trainControl(method = "repeatedCV", 
@@ -47,7 +48,9 @@ class_knn_model <- train(CLASS~.,
                         trControl = fitControl,
                         tuneGrid = expand.grid(k=(2:10))
 )
+save(class_knn_model, file = "model/class_knn_model.rda")
 
 class_knn_predict <- predict(class_knn_model, class_testing[,-(length(class_testing))])
 class_knn_verification <- confusionMatrix(class_testing$CLASS, class_knn_predict)
 print(class_knn_verification)
+save(class_knn_verification, file = "dat/class_knn_verification.rda")
