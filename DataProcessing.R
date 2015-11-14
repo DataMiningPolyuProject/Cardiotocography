@@ -42,7 +42,10 @@ data$CLASS = as.factor(data$CLASS)
 # Finally, remove columns with near-zero variance
 data = data[,-nearZeroVar(data, freqCut = 300/1)]
 
-# Remove binary decision classes
+# Data for visualization
+raw_data <- data.frame(data)
+
+# Remove binary decision classes [cofounding variables. see dataset description]
 data <- data[-24:-33]
 
 # shuffle and split for training and testing
@@ -56,3 +59,4 @@ training <- data[-trainIndex, ]
 # saving
 save(training, file = "dat/raw_training.rda")
 save(testing, file = "dat/raw_testing.rda")
+save(data, file = "dat/raw_data.rda")
