@@ -8,11 +8,16 @@ registerDoParallel(cores = 8)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
+
+# seeds for parallel workers
+seeds <- vector(mode = "list", length = 6) # length is = (n_repeats*nresampling)+1
+for(i in 1:5) seeds[[i]]<- sample.int(n=1000, 22) # ...the number of tuning parameter...
+seeds[[6]]<-sample.int(1000, 1) # for the last model
+
 load(file = "dat/nsp_training.rda")
 load(file = "dat/nsp_testing.rda")
 load(file = "dat/class_training.rda")
 load(file = "dat/class_testing.rda")
-
 
 fitControl <- trainControl(method = "repeatedCV", 
                            number = 5, 

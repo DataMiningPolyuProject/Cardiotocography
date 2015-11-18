@@ -9,6 +9,7 @@ library(lattice)
 
 # Set seed for reproducibility and also set working directory
 set.seed(1)
+<<<<<<< HEAD
 setwd("C:/Users/User/Documents/GitHub/Cardiotocography")
 load(file = "dat/raw_data.rda")
 
@@ -23,6 +24,9 @@ load(file = "dat/raw_data.rda")
 ggplot(raw_data, aes(x = Width, y = Min, colour = NSP)) + geom_point(size = 3) + scale_colour_brewer(palette = 11) + theme(panel.background = element_rect(fill = "gray42"))
 
 
+=======
+load(file = "dat/raw_data.rda")
+>>>>>>> origin/master
 
 
 png(filename = "AC_hist.png", width = 800, height = 600)
