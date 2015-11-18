@@ -8,7 +8,6 @@ library(GGally)
 # Set seed for reproducibility and also set working directory
 set.seed(1)
 load(file = "dat/raw_data.rda")
-setwd("C:/Users/User/Documents/GitHub/Cardiotocography")
 
 
 png(filename = "pairs.png", width = 2000, height = 2000)
