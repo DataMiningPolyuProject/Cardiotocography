@@ -17,7 +17,7 @@ $RECYCLE.BIN/
 # R DATA
 *.rda
 .Rhistory
-*.png
+#*.png
 
 # Windows shortcuts
 *.lnk
