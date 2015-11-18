@@ -45,3 +45,13 @@ ac_hist <- ggplot(raw_data, aes(x=AC, fill=NSP)) +
         theme(panel.background = element_rect(fill = "gray42"))
 ac_hist
 dev.off()
+
+
+
+png(filename = "variance_boxplot.png", width = 800, height = 600)
+variance_boxplot <- ggplot(raw_data, aes(x= NSP, y=Variance, fill=NSP)) +
+            geom_boxplot() +
+            scale_fill_brewer(palette = 11) +
+            theme(panel.background = element_rect(fill = "gray42"))
+variance_boxplot
+dev.off()
