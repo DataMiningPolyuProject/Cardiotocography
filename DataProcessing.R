@@ -39,6 +39,9 @@ data[,unique_values_count<5] = data.frame(lapply(data[,unique_values_count<5], F
 # Treat CLASS as a factor as well
 data$CLASS = as.factor(data$CLASS)
 
+# Names for levels
+levels(data$NSP) = c("Normal", "Suspect", "Pathologic")
+
 # Finally, remove columns with near-zero variance
 data = data[,-nearZeroVar(data, freqCut = 300/1)]
 
@@ -59,4 +62,4 @@ training <- data[-trainIndex, ]
 # saving
 save(training, file = "dat/raw_training.rda")
 save(testing, file = "dat/raw_testing.rda")
-save(data, file = "dat/raw_data.rda")
+save(raw_data, file = "dat/raw_data.rda")
