@@ -20,16 +20,27 @@ load(file = "dat/raw_training.rda")
 load(file = "dat/raw_testing.rda")
 
 # seperate data sets
-nsp_raw_training <- training[,-(length(training)-1)]
-nsp_raw_testing <- testing[,-(length(testing)-1)]
-class_raw_training <- training[,-(length(training))]
-class_raw_testing <- testing[,-(length(testing))]
+#nsp_raw_training <- training[,-(length(training)-1)]
+#nsp_raw_testing <- testing[,-(length(testing)-1)]
+#class_raw_training <- training[,-(length(training))]
+#class_raw_testing <- testing[,-(length(testing))]
 
-save(nsp_raw_training, file = "dat/nsp_raw_training.rda")
-save(nsp_raw_testing, file = "dat/nsp_raw_testing.rda")
-save(class_raw_training, file = "dat/class_raw_training.rda")
-save(class_raw_testing, file = "dat/class_raw_testing.rda")
+#save(nsp_raw_training, file = "dat/nsp_raw_training.rda")
+#save(nsp_raw_testing, file = "dat/nsp_raw_testing.rda")
+#save(class_raw_training, file = "dat/class_raw_training.rda")
+#save(class_raw_testing, file = "dat/class_raw_testing.rda")
 
+# seperate data sets
+nsp_training <- training[,-(length(training)-1)]
+nsp_testing <- testing[,-(length(testing)-1)]
+class_training <- training[,-(length(training))]
+class_testing <- testing[,-(length(testing))]
+
+save(nsp_training, file = "dat/nsp_training.rda")
+save(nsp_testing, file = "dat/nsp_testing.rda")
+save(class_training, file = "dat/class_training.rda")
+save(class_testing, file = "dat/class_testing.rda")
+quit()
 #### correlation between attributes ###
 
 ### correlation filtering ###
