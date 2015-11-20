@@ -4,6 +4,8 @@ rm(list = ls())
 # load libraries
 library(caret)
 library(doParallel)
+library(rattle)
+library(rpart.plot)
 registerDoParallel(cores = 4)
 
 # Set seed for reproducibility and also set working directory
@@ -23,7 +25,7 @@ fitControl <- trainControl(method = "repeatedCV",
 #Define Equation for Models
 nsp_cart_model <- train(NSP~.,
                        data = nsp_training,
-                       model = "cart",
+                       method = "rpart",
                        trControl = fitControl
 )
 save(nsp_cart_model, file = "model/nsp_cart_model.rda")
@@ -43,10 +45,15 @@ fitControl <- trainControl(method = "repeatedCV",
 #Define Equation for Models
 class_cart_model <- train(CLASS~.,
                          data = class_training,
-                         model = "cart",
+                         method = "rpart",
                          trControl = fitControl
 )
 save(class_cart_model, file = "model/class_cart_model.rda")
+
+# Plotting
+png(filename = "decision_tree_plot.png", width = 800, height = 600)
+fancyRpartPlot(nsp_cart_model$finalModel)
+dev.off()
 
 class_cart_predict <- predict(class_cart_model, class_testing[,-(length(class_testing))])
 class_cart_verification <- confusionMatrix(class_testing$CLASS, class_cart_predict)
